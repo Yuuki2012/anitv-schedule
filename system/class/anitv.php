@@ -31,10 +31,10 @@ class AniTV {
 	function download($source) {
 		switch ($source) {
 			case 'anidb.info':
-				$contents = file_get_contents('http://anidb.net/api/animetitles.dat.gz');
-				file_put_contents('data/animetitles.dat.gz', $contents);
+				$contents = file_get_contents('http://anidb.net/api/anime-titles.dat.gz');
+				file_put_contents('data/animetitles.dat', $contents);
 
-				$execute = 'gunzip -f ' . dirname(__FILE__) . '/data/animetitles.dat.gz'; `$execute`;
+				$execute = 'gunzip -f ' . dirname(__FILE__) . '/data/animetitles.dat.gz'; `$execute`; //This isn't gonna work :^)
 
 				$contents = file_get_contents('data/animetitles.dat');
 				$data = preg_replace('/([0-9]+)\|([0-9])\|(.*?)\|(.*)/', 'INSERT INTO `anidb` (`aid`, `type`, `language`, `title`) VALUES (\'\1\', \'\2\', \'\3\', \'\4\');', $contents);
@@ -441,19 +441,19 @@ class AniTV {
 					break;
 
 				case 1:
-					$this->link->query("INSERT INTO `history` (`TID`, `IP`, `OriginalRomaji`, `NewRomaji`) VALUES ('{$row->TID}', '{$_SERVER['REMOTE_ADDR']}', '{$row->TitleRomaji}', '{$value}'");
+					$this->link->query("INSERT INTO `history` (`TID`, `IP`, `OriginalRomaji`, `NewRomaji`) VALUES ('{$row->TID}', '{$_SERVER['REMOTE_ADDR']}', '{$row->TitleRomaji}', '{$value}');");
 					$this->link->query("UPDATE `title` SET `TitleRomaji` = '{$value}' WHERE `TID` = '{$id}'");
 					return TRUE;
 					break;
 
 				case 2:
-					$this->link->query("INSERT INTO `history` (`TID`, `IP`, `OriginalTitle`, `NewTitle`) VALUES ('{$row->TID}', '{$_SERVER['REMOTE_ADDR']}', '{$row->TitleManual}', '{$value}'");
+					$this->link->query("INSERT INTO `history` (`TID`, `IP`, `OriginalTitle`, `NewTitle`) VALUES ('{$row->TID}', '{$_SERVER['REMOTE_ADDR']}', '{$row->TitleManual}', '{$value}');");
 					$this->link->query("UPDATE `title` SET `TitleManual` = '{$value}' WHERE `TID` = '{$id}'");
 					return TRUE;
 					break;
 
 				case 3:
-					$this->link->query("INSERT INTO `history` (`TID`, `IP`, `OriginalAniDB`, `NewAniDB`) VALUES ('{$row->TID}', '{$_SERVER['REMOTE_ADDR']}', '{$row->AID}', '{$value}'");
+					$this->link->query("INSERT INTO `history` (`TID`, `IP`, `OriginalAniDB`, `NewAniDB`) VALUES ('{$row->TID}', '{$_SERVER['REMOTE_ADDR']}', '{$row->AID}', '{$value}');");
 					$this->link->query("UPDATE `title` SET `AID` = '{$value}' WHERE `TID` = '{$id}'");
 					return TRUE;
 					break;
